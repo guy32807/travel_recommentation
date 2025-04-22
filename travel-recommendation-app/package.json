@@ -1,0 +1,32 @@
+{
+  "name": "travel-recommendation-app",
+  "version": "1.0.0",
+  "description": "A travel recommendation application that utilizes a backend API for global hotel and travel information.",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "client": "npm start --prefix client",
+    "server": "nodemon server/server.js",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.10.9",
+    "dotenv": "^8.2.0",
+    "axios": "^0.21.1",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7",
+    "concurrently": "^5.3.0"
+  },
+  "keywords": [
+    "travel",
+    "recommendation",
+    "api",
+    "hotel",
+    "information"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
+}

@@ -3,25 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <!-- Include reusable navigation -->
     <div id="navigation"></div>
 
-    <div class="container mx-auto my-10">
-        <div class="flex justify-center">
-            <div class="w-full max-w-2xl">
-                <div class="bg-black bg-opacity-70 rounded shadow p-8">
-                    <h1 class="text-3xl font-mono font-bold mb-4 text-green-300">Venture into the Unknown!</h1>
-                    <p class="mb-6 text-green-200">
-                        Step into a realm where the laws of nature are rewritten and every step uncovers secrets of a world beyond our imagination.
-                        Traverse surreal landscapes, encounter mystical beings, and let your spirit soar across interdimensional frontiers.
-                        Embrace an adventure that promises enchanting encounters, hidden treasures, and a journey into the very heart of another world.
-                    </p>
-                    <div id="result-label"></div>
-                </div>
+    <div class="container">
+        <div class="content">
+            <div class="card">
+                <h1 class="title">Venture into the Unknown!</h1>
+                <p class="description">
+                    Step into a realm where the laws of nature are rewritten and every step uncovers secrets of a world beyond our imagination.
+                    Traverse surreal landscapes, encounter mystical beings, and let your spirit soar across interdimensional frontiers.
+                    Embrace an adventure that promises enchanting encounters, hidden treasures, and a journey into the very heart of another world.
+                </p>
+                <div id="result-label"></div>
             </div>
         </div>
     </div>
@@ -38,7 +35,9 @@
             description: "Discover mystical travel destinations and interdimensional adventures. Experience surreal landscapes and enchanting encounters with Otherworldly Journeys.",
             keywords: "otherworldly travel, mystical destinations, interdimensional adventures, surreal landscapes, magical journeys",
             url: "https://otherworldlyjourneys.com/",
-            image: "https://otherworldlyjourneys.com/images/og-image.jpg"
+            image: "https://otherworldlyjourneys.com/images/og-image.jpg",
+            twitterHandle: "@OtherworldlyTravel",
+            facebookAppId: "1234567890"
         });
     </script>
 </body>

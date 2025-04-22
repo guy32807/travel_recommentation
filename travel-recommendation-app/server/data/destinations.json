@@ -1,0 +1,87 @@
+[
+    {
+        "id": 1,
+        "name": "Paris",
+        "country": "France",
+        "description": "The City of Light, known for its art, fashion, and culture.",
+        "image": "https://example.com/images/paris.jpg",
+        "attractions": [
+            "Eiffel Tower",
+            "Louvre Museum",
+            "Notre-Dame Cathedral"
+        ],
+        "averageCost": {
+            "hotel": 150,
+            "food": 50,
+            "transport": 20
+        }
+    },
+    {
+        "id": 2,
+        "name": "Tokyo",
+        "country": "Japan",
+        "description": "A bustling metropolis blending tradition and modernity.",
+        "image": "https://example.com/images/tokyo.jpg",
+        "attractions": [
+            "Tokyo Tower",
+            "Shinjuku Gyoen National Garden",
+            "Senso-ji Temple"
+        ],
+        "averageCost": {
+            "hotel": 120,
+            "food": 40,
+            "transport": 15
+        }
+    },
+    {
+        "id": 3,
+        "name": "New York City",
+        "country": "USA",
+        "description": "The Big Apple, famous for its skyline and vibrant culture.",
+        "image": "https://example.com/images/nyc.jpg",
+        "attractions": [
+            "Statue of Liberty",
+            "Central Park",
+            "Times Square"
+        ],
+        "averageCost": {
+            "hotel": 200,
+            "food": 60,
+            "transport": 25
+        }
+    },
+    {
+        "id": 4,
+        "name": "Cairo",
+        "country": "Egypt",
+        "description": "Home to the ancient pyramids and rich history.",
+        "image": "https://example.com/images/cairo.jpg",
+        "attractions": [
+            "Pyramids of Giza",
+            "Egyptian Museum",
+            "Khan El Khalili"
+        ],
+        "averageCost": {
+            "hotel": 80,
+            "food": 20,
+            "transport": 10
+        }
+    },
+    {
+        "id": 5,
+        "name": "Sydney",
+        "country": "Australia",
+        "description": "Known for its Sydney Opera House and beautiful harbor.",
+        "image": "https://example.com/images/sydney.jpg",
+        "attractions": [
+            "Sydney Opera House",
+            "Harbour Bridge",
+            "Bondi Beach"
+        ],
+        "averageCost": {
+            "hotel": 180,
+            "food": 55,
+            "transport": 18
+        }
+    }
+]
