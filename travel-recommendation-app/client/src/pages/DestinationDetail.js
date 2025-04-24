@@ -1,32 +1,79 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { 
-  Container, 
-  Typography, 
-  Box, 
-  Grid, 
-  Paper, 
-  Divider, 
-  Chip,
-  CircularProgress,
+import {
+  Container,
+  Typography,
+  Box,
+  Grid,
+  Paper,
   Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   Card,
-  CardMedia,
   CardContent,
-  Rating,
+  CardMedia,
+  Tabs,
   Tab,
-  Tabs
+  Divider,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemIcon,
+  Rating,
+  Chip,
+  CircularProgress
 } from '@mui/material';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
-import WeatherIcon from '@mui/icons-material/Cloud';
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-import HotelList from '../components/hotels/HotelList';
-import travelApiService from '../services/travelApi';
+import AttractionsIcon from '@mui/icons-material/Attractions';
+import RestaurantIcon from '@mui/icons-material/Restaurant';
+import HotelIcon from '@mui/icons-material/Hotel';
+import LocalActivityIcon from '@mui/icons-material/LocalActivity';
+import PublicIcon from '@mui/icons-material/Public';
+import EventIcon from '@mui/icons-material/Event';
+import FlightIcon from '@mui/icons-material/Flight'; // Add this import to fix the error
+import WeatherWidget from '../components/widgets/WeatherWidget';
+import CurrencyWidget from '../components/widgets/CurrencyWidget';
+
+// Mock data for demonstration - in a real app, this would come from your API
+const mockDestination = {
+  id: "paris123",
+  name: "Paris",
+  country: "France",
+  description: "Paris, the City of Light, is the capital of France and one of the most popular tourist destinations in the world. Known for its romantic ambiance, gastronomy, fashion, and art, Paris offers visitors a wealth of experiences from iconic landmarks to hidden gems.",
+  mainImage: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1173&q=80",
+  images: [
+    "https://images.unsplash.com/photo-1541171382475-0509176449e4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+    "https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1087&q=80",
+    "https://images.unsplash.com/photo-1471623320832-752e8bbf8413?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+  ],
+  rating: 4.7,
+  reviews: 3245,
+  location: {
+    coordinates: {
+      latitude: 48.8566,
+      longitude: 2.3522
+    },
+    address: "Paris, France"
+  },
+  attractions: [
+    { name: "Eiffel Tower", description: "Iconic iron tower that's one of the most recognizable structures in the world", rating: 4.6 },
+    { name: "Louvre Museum", description: "World's largest art museum and historic monument housing the Mona Lisa", rating: 4.8 },
+    { name: "Notre-Dame Cathedral", description: "Medieval Catholic cathedral on the Île de la Cité", rating: 4.7 },
+    { name: "Arc de Triomphe", description: "Iconic triumphal arch honoring those who fought for France", rating: 4.5 }
+  ],
+  restaurants: [
+    { name: "Le Jules Verne", description: "Upscale restaurant on the Eiffel Tower with panoramic views", rating: 4.4 },
+    { name: "L'Ambroisie", description: "Classic French cuisine in a refined setting", rating: 4.7 },
+    { name: "Septime", description: "Modern French cuisine with a focus on seasonal ingredients", rating: 4.6 }
+  ],
+  hotels: [
+    { name: "Hôtel Plaza Athénée", description: "Luxury hotel with views of the Eiffel Tower", rating: 4.8 },
+    { name: "The Ritz Paris", description: "Historic luxury hotel in the heart of Paris", rating: 4.9 },
+    { name: "Le Bristol Paris", description: "Elegant hotel with a rooftop swimming pool", rating: 4.7 }
+  ],
+  events: [
+    { name: "Bastille Day", date: "July 14, 2024", description: "National celebration with fireworks at the Eiffel Tower" },
+    { name: "Paris Fashion Week", date: "September 2024", description: "Major fashion event showcasing top designers" }
+  ],
+  bestTimeToVisit: "April to June and October to early November"
+};
 
 const DestinationDetail = () => {
   const { id } = useParams();
@@ -34,452 +81,322 @@ const DestinationDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [tabValue, setTabValue] = useState(0);
-  const [selectedHotel, setSelectedHotel] = useState(null);
-  const [hotelDialogOpen, setHotelDialogOpen] = useState(false);
-
+  
   useEffect(() => {
+    // In a real app, this would be an API call
     const fetchDestination = async () => {
       try {
         setLoading(true);
-        const destinationData = await travelApiService.getDestinationById(id);
-        setDestination(destinationData);
+        // Simulate API call with timeout
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        // In real implementation, you would fetch data from your API
+        // const response = await fetch(`/api/destinations/${id}`);
+        // const data = await response.json();
+        
+        // For now, use mock data
+        setDestination(mockDestination);
         setLoading(false);
       } catch (err) {
-        setError('Failed to load destination. Please try again later.');
-        setLoading(false);
         console.error('Error fetching destination:', err);
+        setError('Failed to load destination details. Please try again.');
+        setLoading(false);
       }
     };
-
+    
     fetchDestination();
   }, [id]);
-
+  
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
   };
-
-  const handleHotelSelect = async (hotel) => {
-    try {
-      // Fetch more details about the hotel
-      const hotelDetails = await travelApiService.getHotelDetails(hotel.place_id);
-      setSelectedHotel(hotelDetails);
-      setHotelDialogOpen(true);
-    } catch (err) {
-      console.error('Error fetching hotel details:', err);
-    }
-  };
-
-  const handleDialogClose = () => {
-    setHotelDialogOpen(false);
-  };
-
-  // Render budget indicator with icons
-  const renderBudget = (level) => {
-    const icons = [];
-    let count;
-    
-    switch(level) {
-      case 'budget':
-        count = 1;
-        break;
-      case 'moderate':
-        count = 2;
-        break;
-      case 'luxury':
-        count = 3;
-        break;
-      default:
-        count = 1;
-    }
-    
-    for (let i = 0; i < count; i++) {
-      icons.push(<AttachMoneyIcon key={i} />);
-    }
-    
-    return icons;
-  };
-
+  
   if (loading) {
     return (
-      <Box display="flex" justifyContent="center" my={8}>
-        <CircularProgress size={60} />
-      </Box>
-    );
-  }
-
-  if (error || !destination) {
-    return (
-      <Container maxWidth="md">
-        <Box my={8} textAlign="center">
-          <Typography variant="h5" color="error" gutterBottom>
-            {error || 'Destination not found'}
-          </Typography>
-          <Button variant="contained" color="primary" href="/destinations">
-            Back to Destinations
-          </Button>
-        </Box>
+      <Container maxWidth="lg" sx={{ mt: 4, textAlign: 'center' }}>
+        <CircularProgress />
+        <Typography variant="h6" mt={2}>
+          Loading destination details...
+        </Typography>
       </Container>
     );
   }
-
-  const { 
-    name, 
-    location, 
-    description, 
-    images, 
-    climate, 
-    budgetLevel, 
-    activities, 
-    bestTimeToVisit,
-    ratings,
-    accommodations
-  } = destination;
-
-  // Format coordinates for hotel search
-  const coordinates = location.coordinates 
-    ? `${location.coordinates.latitude},${location.coordinates.longitude}` 
-    : null;
-
-  return (
-    <Container maxWidth="lg">
-      {/* Hero Section */}
-      <Box 
-        sx={{
-          height: '50vh',
-          background: `url(${images && images.length > 0 ? images[0] : 'https://source.unsplash.com/random/1200x800/?travel'})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          position: 'relative',
-          mb: 4,
-          borderRadius: 2,
-          overflow: 'hidden'
-        }}
-      >
-        <Box 
-          sx={{
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-            right: 0,
-            p: 4,
-            background: 'linear-gradient(transparent, rgba(0,0,0,0.7))',
-            color: 'white'
-          }}
-        >
-          <Typography variant="h2" component="h1" gutterBottom>
-            {name}
+  
+  if (error) {
+    return (
+      <Container maxWidth="lg" sx={{ mt: 4 }}>
+        <Paper sx={{ p: 3, textAlign: 'center' }}>
+          <Typography color="error" variant="h6">
+            {error}
           </Typography>
-          <Box display="flex" alignItems="center">
-            <LocationOnIcon fontSize="small" sx={{ mr: 1 }} />
-            <Typography variant="h6">
-              {location.city}, {location.country}
+          <Button 
+            variant="outlined" 
+            color="primary" 
+            sx={{ mt: 2 }}
+            onClick={() => window.location.reload()}
+          >
+            Try Again
+          </Button>
+        </Paper>
+      </Container>
+    );
+  }
+  
+  // Safe guard against null or undefined destination
+  if (!destination) {
+    return (
+      <Container maxWidth="lg" sx={{ mt: 4, textAlign: 'center' }}>
+        <Typography variant="h6">
+          Destination not found
+        </Typography>
+        <Button 
+          variant="outlined" 
+          color="primary" 
+          sx={{ mt: 2 }}
+          onClick={() => window.history.back()}
+        >
+          Go Back
+        </Button>
+      </Container>
+    );
+  }
+  
+  // Now we can safely access destination properties
+  const { name, country, description, mainImage, images, rating, reviews, location, attractions, restaurants, hotels, events, bestTimeToVisit } = destination;
+  
+  return (
+    <Container maxWidth="lg" sx={{ my: 4 }}>
+      {/* Destination Header */}
+      <Box sx={{ mb: 4 }}>
+        <Typography variant="h3" component="h1" gutterBottom>
+          {name}
+        </Typography>
+        <Box display="flex" alignItems="center" mb={2}>
+          <Typography variant="h6" component="span" sx={{ mr: 1 }}>
+            {country}
+          </Typography>
+          <Box sx={{ display: 'flex', alignItems: 'center', ml: 2 }}>
+            <Rating value={rating} precision={0.1} readOnly />
+            <Typography variant="body2" sx={{ ml: 1 }}>
+              ({reviews} reviews)
             </Typography>
           </Box>
         </Box>
+        <Typography variant="body1" paragraph>
+          {description}
+        </Typography>
       </Box>
-
-      {/* Main Content */}
-      <Grid container spacing={4}>
-        {/* Left Column: Details */}
-        <Grid item xs={12} md={8}>
-          <Paper elevation={2} sx={{ p: 3, mb: 4 }}>
-            <Typography variant="h4" gutterBottom>
-              About {name}
-            </Typography>
-            <Typography paragraph>
-              {description}
-            </Typography>
-            
-            <Divider sx={{ my: 3 }} />
-            
-            <Box sx={{ mb: 3 }}>
-              <Typography variant="h6" gutterBottom>
-                Key Details
-              </Typography>
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
-                  <Box display="flex" alignItems="center" mb={1}>
-                    <WeatherIcon color="primary" sx={{ mr: 1 }} />
-                    <Typography>Climate: {climate}</Typography>
-                  </Box>
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <Box display="flex" alignItems="center" mb={1}>
-                    <Box display="flex" alignItems="center">
-                      <Typography mr={1}>Budget Level:</Typography> 
-                      {renderBudget(budgetLevel)}
-                    </Box>
-                  </Box>
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <Box display="flex" alignItems="center" mb={1}>
-                    <CalendarTodayIcon color="primary" sx={{ mr: 1 }} />
-                    <Typography>
-                      Best Time to Visit: {bestTimeToVisit ? bestTimeToVisit.join(', ') : 'All year'}
-                    </Typography>
-                  </Box>
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <Box display="flex" alignItems="center" mb={1}>
-                    <Typography mr={1}>Rating:</Typography>
-                    <Rating value={ratings?.average || 0} precision={0.5} readOnly />
-                    <Typography variant="body2" color="text.secondary" ml={1}>
-                      ({ratings?.count || 0} reviews)
-                    </Typography>
-                  </Box>
-                </Grid>
-              </Grid>
-            </Box>
-            
-            <Divider sx={{ my: 3 }} />
-            
-            <Box>
-              <Typography variant="h6" gutterBottom>
-                Activities
-              </Typography>
-              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-                {activities && activities.map((activity, index) => (
-                  <Chip 
-                    key={index} 
-                    label={activity} 
-                    color="primary" 
-                    variant="outlined" 
-                  />
-                ))}
-              </Box>
-            </Box>
-          </Paper>
-
-          {/* Tabs for Hotels, Flights, etc. */}
-          <Paper elevation={2} sx={{ mb: 4 }}>
-            <Tabs 
-              value={tabValue} 
-              onChange={handleTabChange} 
-              aria-label="destination options"
-              variant="fullWidth"
-            >
-              <Tab label="Accommodations" />
-              <Tab label="Gallery" />
-              <Tab label="Reviews" />
-            </Tabs>
-            
-            {/* Accommodations Tab */}
-            {tabValue === 0 && (
-              <Box p={3}>
-                {coordinates ? (
-                  <HotelList 
-                    location={coordinates} 
-                    onHotelSelect={handleHotelSelect}
-                  />
-                ) : (
-                  <Box textAlign="center" py={4}>
-                    <Typography color="textSecondary">
-                      Coordinates not available for this destination.
-                    </Typography>
-                  </Box>
-                )}
-              </Box>
-            )}
-            
-            {/* Gallery Tab */}
-            {tabValue === 1 && (
-              <Box p={3}>
-                <Grid container spacing={2}>
-                  {images && images.map((image, index) => (
-                    <Grid item xs={12} sm={6} md={4} key={index}>
-                      <img 
-                        src={image} 
-                        alt={`${name} - ${index}`} 
-                        style={{ width: '100%', height: 200, objectFit: 'cover', borderRadius: 8 }}
-                      />
-                    </Grid>
-                  ))}
-                </Grid>
-              </Box>
-            )}
-            
-            {/* Reviews Tab - Can be implemented later */}
-            {tabValue === 2 && (
-              <Box p={3} textAlign="center">
-                <Typography>Reviews coming soon!</Typography>
-              </Box>
-            )}
-          </Paper>
+      
+      {/* Main Image */}
+      <Paper 
+        elevation={3} 
+        sx={{ 
+          height: 400, 
+          mb: 4,
+          backgroundImage: `url(${mainImage})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          borderRadius: 2 
+        }}
+      />
+      
+      {/* Image Gallery */}
+      <Box sx={{ mb: 4 }}>
+        <Typography variant="h5" gutterBottom>
+          Gallery
+        </Typography>
+        <Grid container spacing={2}>
+          {images && images.map((image, index) => (
+            <Grid item xs={12} sm={4} key={index}>
+              <Card>
+                <CardMedia
+                  component="img"
+                  height="200"
+                  image={image}
+                  alt={`${name} image ${index + 1}`}
+                />
+              </Card>
+            </Grid>
+          ))}
         </Grid>
-        
-        {/* Right Column: Map & Recommended Accommodations */}
-        <Grid item xs={12} md={4}>
-          <Paper elevation={2} sx={{ p: 3, mb: 4 }}>
-            <Typography variant="h6" gutterBottom>
-              Map
-            </Typography>
-            {coordinates ? (
-              <iframe
-                title="Destination Map"
-                width="100%"
-                height="300"
-                frameBorder="0"
-                src={`https://www.google.com/maps/embed/v1/place?key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY_PUBLIC}&q=${coordinates}&zoom=12`}
-                allowFullScreen
-              ></iframe>
-            ) : (
-              <Box 
-                height={300} 
-                display="flex" 
-                alignItems="center" 
-                justifyContent="center"
-                bgcolor="grey.100"
-              >
-                <Typography color="textSecondary">Map not available</Typography>
-              </Box>
-            )}
-          </Paper>
-          
-          {/* Featured Accommodations */}
-          {accommodations && accommodations.length > 0 && (
-            <Paper elevation={2} sx={{ p: 3 }}>
-              <Typography variant="h6" gutterBottom>
-                Recommended Stays
-              </Typography>
-              {accommodations.map((accommodation, index) => (
-                <Card key={index} sx={{ mb: 2 }}>
-                  <CardContent>
-                    <Typography variant="subtitle1" component="div">
-                      {accommodation.name}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary" gutterBottom>
-                      {accommodation.type} • {accommodation.priceRange}
-                    </Typography>
-                    {accommodation.link && (
-                      <Button 
-                        size="small" 
-                        href={accommodation.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        Book Now
-                      </Button>
-                    )}
-                  </CardContent>
-                </Card>
-              ))}
-            </Paper>
-          )}
+      </Box>
+      
+      {/* Weather and Currency Widgets */}
+      <Grid container spacing={3} sx={{ mb: 4 }}>
+        <Grid item xs={12} md={6}>
+          <WeatherWidget 
+            location={location && location.coordinates ? {
+              lat: location.coordinates.latitude,
+              lng: location.coordinates.longitude
+            } : null} 
+            locationName={name} 
+          />
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <CurrencyWidget country={country} />
         </Grid>
       </Grid>
       
-      {/* Hotel Details Dialog */}
-      <Dialog
-        open={hotelDialogOpen}
-        onClose={handleDialogClose}
-        maxWidth="md"
-        fullWidth
-      >
-        {selectedHotel && (
-          <>
-            <DialogTitle>
-              {selectedHotel.name}
-            </DialogTitle>
-            <DialogContent>
-              <Grid container spacing={3}>
-                {/* Hotel Photos */}
-                {selectedHotel.photos && selectedHotel.photos.length > 0 && (
-                  <Grid item xs={12}>
-                    <Box sx={{ display: 'flex', overflowX: 'auto', gap: 1, pb: 1 }}>
-                      {selectedHotel.photos.slice(0, 5).map((photo, index) => (
-                        <img
-                          key={index}
-                          src={`https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${photo.photo_reference}&key=${process.env.REACT_APP_GOOGLE_PLACES_API_KEY_PUBLIC}`}
-                          alt={`${selectedHotel.name} - ${index}`}
-                          style={{ height: 200, borderRadius: 4 }}
-                        />
-                      ))}
-                    </Box>
-                  </Grid>
-                )}
-                
-                {/* Hotel Details */}
-                <Grid item xs={12} md={6}>
-                  <Typography variant="h6" gutterBottom>
-                    Details
-                  </Typography>
-                  <Box mb={2}>
-                    <Typography variant="body1" gutterBottom>
-                      <strong>Address:</strong> {selectedHotel.formatted_address}
-                    </Typography>
-                    {selectedHotel.formatted_phone_number && (
-                      <Typography variant="body1" gutterBottom>
-                        <strong>Phone:</strong> {selectedHotel.formatted_phone_number}
-                      </Typography>
-                    )}
-                    {selectedHotel.rating && (
-                      <Box display="flex" alignItems="center" mb={1}>
-                        <Typography variant="body1" mr={1}>
-                          <strong>Rating:</strong>
-                        </Typography>
-                        <Rating value={selectedHotel.rating} precision={0.1} readOnly />
-                        <Typography variant="body2" color="text.secondary" ml={1}>
-                          ({selectedHotel.user_ratings_total} reviews)
-                        </Typography>
+      {/* Tabs for different information */}
+      <Paper sx={{ mb: 4 }}>
+        <Tabs 
+          value={tabValue} 
+          onChange={handleTabChange} 
+          variant="scrollable"
+          scrollButtons="auto"
+          aria-label="destination information tabs"
+        >
+          <Tab icon={<AttractionsIcon />} label="Attractions" />
+          <Tab icon={<RestaurantIcon />} label="Restaurants" />
+          <Tab icon={<HotelIcon />} label="Hotels" />
+          <Tab icon={<EventIcon />} label="Events" />
+          <Tab icon={<PublicIcon />} label="Travel Info" />
+        </Tabs>
+        
+        <Divider />
+        
+        <Box sx={{ p: 3 }}>
+          {/* Attractions Tab */}
+          {tabValue === 0 && (
+            <List>
+              {attractions && attractions.map((attraction, index) => (
+                <ListItem key={index} alignItems="flex-start" sx={{ mb: 2 }}>
+                  <ListItemIcon>
+                    <AttractionsIcon color="primary" />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={
+                      <Box display="flex" justifyContent="space-between">
+                        <Typography variant="h6">{attraction.name}</Typography>
+                        <Rating value={attraction.rating} readOnly size="small" />
                       </Box>
-                    )}
-                    {selectedHotel.price_level && (
-                      <Typography variant="body1" gutterBottom>
-                        <strong>Price Level:</strong> {'$'.repeat(selectedHotel.price_level)}
-                      </Typography>
-                    )}
-                  </Box>
-                </Grid>
-                
-                {/* Reviews */}
-                <Grid item xs={12} md={6}>
-                  <Typography variant="h6" gutterBottom>
-                    Recent Reviews
-                  </Typography>
-                  {selectedHotel.reviews ? (
-                    <Box sx={{ maxHeight: 200, overflowY: 'auto' }}>
-                      {selectedHotel.reviews.slice(0, 3).map((review, index) => (
-                        <Box key={index} mb={2}>
-                          <Box display="flex" alignItems="center" mb={0.5}>
-                            <Typography variant="subtitle2" mr={1}>
-                              {review.author_name}
-                            </Typography>
-                            <Rating value={review.rating} size="small" readOnly />
-                          </Box>
-                          <Typography variant="body2" color="text.secondary">
-                            {review.text.length > 150 
-                              ? `${review.text.substring(0, 150)}...` 
-                              : review.text}
-                          </Typography>
-                        </Box>
-                      ))}
-                    </Box>
-                  ) : (
-                    <Typography variant="body2" color="text.secondary">
-                      No reviews available.
-                    </Typography>
-                  )}
-                </Grid>
-              </Grid>
-            </DialogContent>
-            <DialogActions>
-              {selectedHotel.website && (
-                <Button 
-                  href={selectedHotel.website}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  color="primary"
-                >
-                  Visit Website
-                </Button>
-              )}
-              <Button onClick={handleDialogClose} color="primary">
-                Close
-              </Button>
-            </DialogActions>
-          </>
-        )}
-      </Dialog>
+                    }
+                    secondary={attraction.description}
+                  />
+                </ListItem>
+              ))}
+            </List>
+          )}
+          
+          {/* Restaurants Tab */}
+          {tabValue === 1 && (
+            <List>
+              {restaurants && restaurants.map((restaurant, index) => (
+                <ListItem key={index} alignItems="flex-start" sx={{ mb: 2 }}>
+                  <ListItemIcon>
+                    <RestaurantIcon color="primary" />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={
+                      <Box display="flex" justifyContent="space-between">
+                        <Typography variant="h6">{restaurant.name}</Typography>
+                        <Rating value={restaurant.rating} readOnly size="small" />
+                      </Box>
+                    }
+                    secondary={restaurant.description}
+                  />
+                </ListItem>
+              ))}
+            </List>
+          )}
+          
+          {/* Hotels Tab */}
+          {tabValue === 2 && (
+            <List>
+              {hotels && hotels.map((hotel, index) => (
+                <ListItem key={index} alignItems="flex-start" sx={{ mb: 2 }}>
+                  <ListItemIcon>
+                    <HotelIcon color="primary" />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={
+                      <Box display="flex" justifyContent="space-between">
+                        <Typography variant="h6">{hotel.name}</Typography>
+                        <Rating value={hotel.rating} readOnly size="small" />
+                      </Box>
+                    }
+                    secondary={hotel.description}
+                  />
+                </ListItem>
+              ))}
+            </List>
+          )}
+          
+          {/* Events Tab */}
+          {tabValue === 3 && (
+            <List>
+              {events && events.map((event, index) => (
+                <ListItem key={index} alignItems="flex-start" sx={{ mb: 2 }}>
+                  <ListItemIcon>
+                    <EventIcon color="primary" />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={
+                      <Box display="flex" justifyContent="space-between">
+                        <Typography variant="h6">{event.name}</Typography>
+                        <Chip label={event.date} color="primary" variant="outlined" size="small" />
+                      </Box>
+                    }
+                    secondary={event.description}
+                  />
+                </ListItem>
+              ))}
+            </List>
+          )}
+          
+          {/* Travel Info Tab */}
+          {tabValue === 4 && (
+            <Box>
+              <Typography variant="h6" gutterBottom>
+                Best Time to Visit
+              </Typography>
+              <Typography paragraph>
+                {bestTimeToVisit}
+              </Typography>
+              
+              <Typography variant="h6" gutterBottom>
+                Location
+              </Typography>
+              <Typography paragraph>
+                {location && location.address}
+              </Typography>
+              
+              {/* Insert more travel information as needed */}
+            </Box>
+          )}
+        </Box>
+      </Paper>
+      
+      {/* Call to Action */}
+      <Paper sx={{ p: 3, textAlign: 'center' }}>
+        <Typography variant="h5" gutterBottom>
+          Ready to visit {name}?
+        </Typography>
+        <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center', gap: 2 }}>
+          <Button 
+            variant="contained" 
+            color="primary" 
+            startIcon={<HotelIcon />}
+            onClick={() => {
+              // Navigate to hotel search with this destination
+              window.location.href = `/hotels/search?destination=${name}`;
+            }}
+          >
+            Find Hotels
+          </Button>
+          <Button 
+            variant="contained" 
+            color="secondary" 
+            startIcon={<FlightIcon />}
+            onClick={() => {
+              // Navigate to flight search with this destination
+              window.location.href = `/flights/search?destination=${name}`;
+            }}
+          >
+            Find Flights
+          </Button>
+        </Box>
+      </Paper>
     </Container>
   );
 };

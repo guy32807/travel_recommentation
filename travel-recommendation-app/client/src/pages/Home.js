@@ -1,156 +1,88 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { styled } from '@mui/material/styles';
-import {
-  Container,
-  Typography,
-  Paper,
-  Grid,
-  Button,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem
-} from '@mui/material';
-
-const HeroSection = styled('div')(({ theme }) => ({
-  padding: theme.spacing(8, 0, 6),
-  backgroundImage: 'url(https://source.unsplash.com/random/1600x900/?travel)',
-  backgroundSize: 'cover',
-  backgroundPosition: 'center',
-  color: 'white',
-  position: 'relative',
-  '&::before': {
-    content: '""',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-  }
-}));
-
-const HeroContent = styled('div')(({ theme }) => ({
-  position: 'relative',
-  zIndex: 1,
-  padding: theme.spacing(6),
-}));
-
-const SearchContainer = styled(Paper)(({ theme }) => ({
-  padding: theme.spacing(4),
-  marginTop: theme.spacing(-6),
-  position: 'relative',
-  zIndex: 2,
-}));
-
-const StyledFormControl = styled(FormControl)(({ theme }) => ({
-  margin: theme.spacing(1),
-  minWidth: 120,
-}));
-
-const SearchButton = styled(Button)(({ theme }) => ({
-  margin: theme.spacing(3, 0),
-}));
+import React from 'react';
+import { Container, Typography, Button, Box, Grid, Card, CardContent, CardMedia } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 const Home = () => {
-  const navigate = useNavigate();
-  const [budget, setBudget] = useState('');
-  const [climate, setClimate] = useState('');
-  const [activity, setActivity] = useState('');
-
-  const handleSearch = () => {
-    const queryParams = new URLSearchParams();
-    if (budget) queryParams.append('budget', budget);
-    if (climate) queryParams.append('climate', climate);
-    if (activity) queryParams.append('activity', activity);
-
-    navigate(`/destinations/search?${queryParams.toString()}`);
-  };
-
   return (
-    <>
-      <HeroSection>
-        <Container maxWidth="md">
-          <HeroContent>
-            <Typography component="h1" variant="h2" align="center" gutterBottom>
-              Discover Your Perfect Destination
-            </Typography>
-            <Typography variant="h5" align="center" paragraph>
-              Find the best travel destinations based on your preferences and budget. 
-              From tropical beaches to snowy mountains, we have recommendations for every traveler.
-            </Typography>
-          </HeroContent>
-        </Container>
-      </HeroSection>
+    <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Box sx={{ textAlign: 'center', mb: 6 }}>
+        <Typography variant="h3" component="h1" gutterBottom>
+          Find Your Perfect Trip
+        </Typography>
+        <Typography variant="h5" color="text.secondary" paragraph>
+          Discover amazing destinations, find the best hotels, and plan your dream vacation.
+        </Typography>
+        <Button 
+          component={Link} 
+          to="/hotels" 
+          variant="contained" 
+          size="large" 
+          color="primary" 
+          sx={{ mt: 2 }}
+        >
+          Search Hotels
+        </Button>
+      </Box>
 
-      <Container maxWidth="md">
-        <SearchContainer elevation={3}>
-          <Typography variant="h4" gutterBottom align="center">
-            Find Your Ideal Destination
-          </Typography>
-          <Grid container spacing={2}>
-            <Grid item xs={12} md={4}>
-              <StyledFormControl fullWidth>
-                <InputLabel id="budget-label">Budget</InputLabel>
-                <Select
-                  labelId="budget-label"
-                  value={budget}
-                  onChange={(e) => setBudget(e.target.value)}
-                >
-                  <MenuItem value=""><em>Any</em></MenuItem>
-                  <MenuItem value="budget">Budget</MenuItem>
-                  <MenuItem value="moderate">Moderate</MenuItem>
-                  <MenuItem value="luxury">Luxury</MenuItem>
-                </Select>
-              </StyledFormControl>
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <StyledFormControl fullWidth>
-                <InputLabel id="climate-label">Climate</InputLabel>
-                <Select
-                  labelId="climate-label"
-                  value={climate}
-                  onChange={(e) => setClimate(e.target.value)}
-                >
-                  <MenuItem value=""><em>Any</em></MenuItem>
-                  <MenuItem value="tropical">Tropical</MenuItem>
-                  <MenuItem value="temperate">Temperate</MenuItem>
-                  <MenuItem value="arid">Arid</MenuItem>
-                  <MenuItem value="continental">Continental</MenuItem>
-                  <MenuItem value="polar">Polar</MenuItem>
-                </Select>
-              </StyledFormControl>
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <StyledFormControl fullWidth>
-                <InputLabel id="activity-label">Activity</InputLabel>
-                <Select
-                  labelId="activity-label"
-                  value={activity}
-                  onChange={(e) => setActivity(e.target.value)}
-                >
-                  <MenuItem value=""><em>Any</em></MenuItem>
-                  <MenuItem value="beach">Beach</MenuItem>
-                  <MenuItem value="hiking">Hiking</MenuItem>
-                  <MenuItem value="skiing">Skiing</MenuItem>
-                  <MenuItem value="sightseeing">Sightseeing</MenuItem>
-                  <MenuItem value="food">Food & Cuisine</MenuItem>
-                </Select>
-              </StyledFormControl>
-            </Grid>
-          </Grid>
-          <SearchButton 
-            fullWidth 
-            variant="contained" 
-            color="primary"
-            onClick={handleSearch}
-          >
-            Search Destinations
-          </SearchButton>
-        </SearchContainer>
-      </Container>
-    </>
+      <Grid container spacing={4}>
+        <Grid item xs={12} md={4}>
+          <Card sx={{ height: '100%' }}>
+            <CardMedia
+              component="img"
+              height="200"
+              image="https://picsum.photos/seed/destination/800/500"
+              alt="Destinations"
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="div">
+                Popular Destinations
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Explore the most popular travel destinations around the world, from vibrant cities to peaceful beaches.
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+        
+        <Grid item xs={12} md={4}>
+          <Card sx={{ height: '100%' }}>
+            <CardMedia
+              component="img"
+              height="200"
+              image="https://picsum.photos/seed/hotel/800/500"
+              alt="Hotels"
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="div">
+                Luxury Hotels
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Find the perfect accommodation for your trip, from budget-friendly options to luxury resorts.
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+        
+        <Grid item xs={12} md={4}>
+          <Card sx={{ height: '100%' }}>
+            <CardMedia
+              component="img"
+              height="200"
+              image="https://picsum.photos/seed/activity/800/500"
+              alt="Activities"
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="div">
+                Amazing Activities
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Discover exciting activities and experiences that will make your trip unforgettable.
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
+    </Container>
   );
 };
 

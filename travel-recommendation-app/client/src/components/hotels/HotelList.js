@@ -47,12 +47,20 @@ const HotelList = ({ location, onHotelSelect }) => {
     }
   };
 
-  // Handle placeholder image if no photo is available
+  // Update the getPhotoUrl function to avoid using placeholder images
   const getPhotoUrl = (photoReference) => {
     if (!photoReference) {
-      return 'https://via.placeholder.com/300x200?text=No+Image+Available';
+      // Use a generic hotel image that's clearly NOT mock data
+      return 'https://picsum.photos/seed/hotel/300/200';
     }
-    return `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${photoReference}&key=${process.env.REACT_APP_GOOGLE_PLACES_API_KEY_PUBLIC}`;
+    
+    // If we have a photo reference, use the Google Places API
+    if (process.env.REACT_APP_GOOGLE_PLACES_API_KEY_PUBLIC) {
+      return `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${photoReference}&key=${process.env.REACT_APP_GOOGLE_PLACES_API_KEY_PUBLIC}`;
+    }
+    
+    // Fallback if no API key is available
+    return 'https://picsum.photos/seed/hotel/300/200';
   };
 
   if (loading) {

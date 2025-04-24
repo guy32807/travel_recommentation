@@ -110,4 +110,54 @@ router.get('/flights/search', async (req, res) => {
   }
 });
 
+// Add or update the hotels endpoint
+router.get('/hotels', async (req, res) => {
+  try {
+    const { location } = req.query;
+    
+    if (!location) {
+      return res.status(400).json({ message: 'Location parameter is required' });
+    }
+    
+    console.log('[externalRoutes] Searching hotels near location:', location);
+    
+    // Use Google Places API to find real hotels
+    const googlePlacesUrl = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json';
+    const apiKey = process.env.GOOGLE_PLACES_API_KEY;
+    
+    if (!apiKey) {
+      return res.status(500).json({ message: 'Google Places API key not configured' });
+    }
+    
+    try {
+      const response = await axios.get(googlePlacesUrl, {
+        params: {
+          location,
+          radius: 5000, // 5km radius
+          type: 'lodging', // Look for lodging establishments
+          key: apiKey
+        }
+      });
+      
+      console.log(`[externalRoutes] Found ${response.data.results.length} hotels`);
+      
+      // Return the actual results from Google Places API
+      return res.json(response.data.results);
+    } catch (apiError) {
+      console.error('[externalRoutes] Google Places API error:', apiError);
+      
+      return res.status(apiError.response?.status || 500).json({
+        message: 'Failed to fetch hotels from Google Places API',
+        error: apiError.message
+      });
+    }
+  } catch (error) {
+    console.error('[externalRoutes] Unexpected error in /hotels endpoint:', error);
+    return res.status(500).json({
+      message: 'An unexpected error occurred',
+      error: error.message
+    });
+  }
+});
+
 module.exports = router;

@@ -1,104 +1,87 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import LocationOnIcon from '@material-ui/icons/LocationOn';
-import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
-import AcUnitIcon from '@material-ui/icons/AcUnit';
+// Update imports to use MUI v5
+import { styled } from '@mui/material/styles';
+import Card from '@mui/material/Card';
+import CardActionArea from '@mui/material/CardActionArea';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import AcUnitIcon from '@mui/icons-material/AcUnit';
 
-const useStyles = makeStyles({
-  root: {
-    maxWidth: 345,
-    margin: '1rem',
-  },
-  media: {
-    height: 140,
-  },
-  location: {
-    display: 'flex',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  icon: {
-    marginRight: 5,
-  },
-  details: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    margin: '8px 0',
-  },
-});
+// Use styled API from MUI v5
+const StyledCard = styled(Card)(({ theme }) => ({
+  maxWidth: 345,
+  margin: theme.spacing(2),
+}));
+
+const IconWrapper = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  marginBottom: theme.spacing(1),
+}));
 
 const DestinationCard = ({ destination }) => {
-  const classes = useStyles();
-  const { _id, name, location, description, images, budgetLevel, climate } = destination;
-
-  // Helper to render budget level
-  const renderBudget = (level) => {
-    switch(level) {
-      case 'budget':
-        return <AttachMoneyIcon />;
-      case 'moderate':
-        return (<><AttachMoneyIcon /><AttachMoneyIcon /></>);
-      case 'luxury':
-        return (<><AttachMoneyIcon /><AttachMoneyIcon /><AttachMoneyIcon /></>);
-      default:
-        return <AttachMoneyIcon />;
-    }
+  // If no destination is provided, use default data
+  const defaultDestination = {
+    name: 'Paris',
+    country: 'France',
+    description: 'The City of Light, famous for its stunning architecture, art museums, and romantic atmosphere.',
+    image: 'https://picsum.photos/seed/paris/400/300',
+    cost: 'High',
+    climate: 'Moderate',
   };
 
+  const dest = destination || defaultDestination;
+
   return (
-    <Card className={classes.root}>
-      <CardActionArea component={Link} to={`/destinations/${_id}`}>
+    <StyledCard>
+      <CardActionArea>
         <CardMedia
-          className={classes.media}
-          image={images && images.length > 0 ? images[0] : 'https://via.placeholder.com/300x150?text=No+Image+Available'}
-          title={name}
+          component="img"
+          height="140"
+          image={dest.image}
+          alt={dest.name}
         />
         <CardContent>
-          <Typography gutterBottom variant="h5" component="h2">
-            {name}
+          <Typography gutterBottom variant="h5" component="div">
+            {dest.name}
           </Typography>
-          <div className={classes.location}>
-            <LocationOnIcon className={classes.icon} fontSize="small" />
-            <Typography variant="body2" color="textSecondary">
-              {location.city}, {location.country}
+          <Typography variant="body2" color="text.secondary">
+            {dest.description}
+          </Typography>
+          <IconWrapper>
+            <LocationOnIcon color="primary" sx={{ mr: 1 }} />
+            <Typography variant="body2" color="text.secondary">
+              {dest.country}
             </Typography>
-          </div>
-          <div className={classes.details}>
-            <div>
-              <Typography component="span" variant="body2" color="textSecondary">
-                Budget: 
-              </Typography>
-              {renderBudget(budgetLevel)}
-            </div>
-            <div>
-              <AcUnitIcon className={classes.icon} fontSize="small" />
-              <Typography component="span" variant="body2" color="textSecondary">
-                {climate}
-              </Typography>
-            </div>
-          </div>
-          <Typography variant="body2" color="textSecondary" component="p">
-            {description.substring(0, 100)}...
-          </Typography>
+          </IconWrapper>
+          <IconWrapper>
+            <AttachMoneyIcon color="primary" sx={{ mr: 1 }} />
+            <Typography variant="body2" color="text.secondary">
+              Cost: {dest.cost}
+            </Typography>
+          </IconWrapper>
+          <IconWrapper>
+            <AcUnitIcon color="primary" sx={{ mr: 1 }} />
+            <Typography variant="body2" color="text.secondary">
+              Climate: {dest.climate}
+            </Typography>
+          </IconWrapper>
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size="small" color="primary" component={Link} to={`/destinations/${_id}`}>
-          Learn More
+        <Button size="small" color="primary">
+          View Details
         </Button>
-        <Button size="small" color="primary" component={Link} to={`/book/${_id}`}>
-          Book Now
+        <Button size="small" color="primary">
+          Add to Trip
         </Button>
       </CardActions>
-    </Card>
+    </StyledCard>
   );
 };
 

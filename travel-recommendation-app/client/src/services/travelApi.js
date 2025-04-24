@@ -1,9 +1,11 @@
 import axios from 'axios';
+import apiClient from './apiClient';
 
 // Base URLs for different APIs
 const BACKEND_URL = '/api';
 const AMADEUS_BASE_URL = 'https://test.api.amadeus.com/v1';
 const GOOGLE_PLACES_BASE_URL = 'https://maps.googleapis.com/maps/api/place';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5002/api';
 
 // Create axios instances for different APIs
 const backendApi = axios.create({
@@ -47,19 +49,25 @@ const travelApiService = {
   },
 
   // Google Places API functions
-  searchHotels: async (location, radius = 5000, type = 'lodging') => {
+  searchHotels: async (location) => {
     try {
-      // This should go through your backend proxy to protect your API key
-      const response = await backendApi.get('/external/places/search', {
-        params: {
-          location,
-          radius,
-          type
-        }
+      console.log('[travelApiService] Searching hotels with location:', location);
+      
+      // Using axios directly instead of apiClient if needed
+      const response = await axios.get(`${API_BASE_URL}/external/hotels`, {
+        params: { location }
       });
-      return response.data.results;
+      
+      console.log('[travelApiService] Hotel search response:', response.data);
+      
+      if (!response.data || !Array.isArray(response.data)) {
+        console.error('[travelApiService] Invalid hotel data format:', response.data);
+        throw new Error('Invalid hotel data received');
+      }
+      
+      return response.data;
     } catch (error) {
-      console.error('Error searching hotels:', error);
+      console.error('[travelApiService] Hotel search failed:', error);
       throw error;
     }
   },

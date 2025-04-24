@@ -22,8 +22,10 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import FlightIcon from '@mui/icons-material/Flight';
 import HotelIcon from '@mui/icons-material/Hotel';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
+// Import the LocationSearch component
+import LocationSearch from '../travel/LocationSearch';
 
-// Create theme instance - this is what was missing
+// Create theme instance
 const theme = createTheme();
 
 const Navbar = () => {
@@ -161,35 +163,29 @@ const Navbar = () => {
               </Box>
             </Grid>
             
-            {/* Destination */}
-            <Grid item xs={12} md={searchType === 'flights' ? 3 : 4}>
-              <TextField
-                label="Where are you going?"
-                variant="outlined"
-                fullWidth
-                value={searchParams.destination}
-                onChange={(e) => handleSearchParamChange('destination', e.target.value)}
-                InputProps={{
-                  startAdornment: <LocationOnIcon color="action" sx={{ mr: 1 }} />
-                }}
-              />
-            </Grid>
-            
             {/* Origin (only for flights) */}
             {searchType === 'flights' && (
               <Grid item xs={12} md={3}>
-                <TextField
+                <LocationSearch
                   label="Where are you flying from?"
-                  variant="outlined"
-                  fullWidth
-                  value={searchParams.origin}
-                  onChange={(e) => handleSearchParamChange('origin', e.target.value)}
-                  InputProps={{
-                    startAdornment: <FlightIcon color="action" sx={{ mr: 1 }} />
-                  }}
+                  placeholder="Enter city or airport"
+                  startAdornment={<FlightIcon color="action" sx={{ mr: 1 }} />}
+                  initialValue={searchParams.origin || null}
+                  onChange={(value) => handleSearchParamChange('origin', value?.iataCode || '')}
                 />
               </Grid>
             )}
+
+            {/* Destination */}
+            <Grid item xs={12} md={searchType === 'flights' ? 3 : 4}>
+              <LocationSearch
+                label="Where are you going?"
+                placeholder="Enter city or airport"
+                startAdornment={<LocationOnIcon color="action" sx={{ mr: 1 }} />}
+                initialValue={searchParams.destination || null}
+                onChange={(value) => handleSearchParamChange('destination', value?.iataCode || '')}
+              />
+            </Grid>
             
             {/* Check-in Date */}
             <Grid item xs={6} md={searchType === 'flights' ? 2 : 3}>
